@@ -92,6 +92,9 @@ function Feed() {
     }, [])
 
     const sendPost = (e) => {
+        
+
+        e.preventDefault();
         // if(input.length !== '') {
             db.collection("posts").add(
                 {
@@ -106,9 +109,7 @@ function Feed() {
             )
         // }
 
-        setInput(" ");
-
-        e.preventDefault();
+        setInput("");
     }
 
     return (

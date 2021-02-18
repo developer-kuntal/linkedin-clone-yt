@@ -27,8 +27,10 @@ function App() {
       } else {
         //user is logged out
         dispatch(logout());
+        
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -37,7 +39,7 @@ function App() {
       { /* Header */ }
       <Header/>
       { user ? (
-        <div className="app_body"> 
+        <div className="app__body"> 
           <Sidebar /> 
           <Feed />        
         </div>
