@@ -12,7 +12,7 @@ import { db } from '../../auth/firebase'
 import firebase from 'firebase'
 import { v4 as uuidv4 } from 'uuid';
 import { selectUser } from '../../features/userSlice'
-
+import FlipMove from 'react-flip-move'
 
 function Feed() {
 
@@ -92,10 +92,8 @@ function Feed() {
     }, [])
 
     const sendPost = (e) => {
-        
-
-        e.preventDefault();
         // if(input.length !== '') {
+            e.preventDefault();
             db.collection("posts").add(
                 {
                     id: uuidv4(),
@@ -130,30 +128,36 @@ function Feed() {
                 </div>
             </div>
 
-            {/* Post */}
+            <FlipMove>
             {posts && [posts].map(( post , i ) =>  {
-                // post.forEach((values,key) => {
+                        post.forEach((values,key) => {
                 //     return <p>{i+1} = {JSON.stringify(values)} </p>
                 // })
-                return <p key={i+1}>{JSON.stringify(post)}Index{i+1}</p>
-// [{"id":"oV4jnCz3RjfVGGcKXfHz","data":{"description":"This is a test","name":"Abhijit Majumder","timestamp":
-// {"seconds":1613560087,"nanoseconds":688000000},"message":"alibaba","id":"c5d95327-c181-44b0-9f85-6329a431ce8f","photoUrl":""}}]
+                // return <div><p key={i+1}>{JSON.stringify(post)}Index{i+1}</p></div>
+                // [{"id":"oV4jnCz3RjfVGGcKXfHz","data":{"description":"This is a test","name":"Abhijit Majumder","timestamp":
+                // {"seconds":1613560087,"nanoseconds":688000000},"message":"alibaba","id":"c5d95327-c181-44b0-9f85-6329a431ce8f","photoUrl":""}}]
 
-                // const {  id, name, description, message, photoUrl } = post;
-                // alert("Data: "+data);
-                    // (<div key={i}>
-                    //     <Post 
-                    //         key={id}
-                    //         name={name}
-                    //         description={description}
-                    //         message={message}
-                    //         photoUrl={photoUrl}
-                    //         />
-                    //     </div>)
+                const { description, name, message, id, photoUrl } = JSON.stringify(values.data);
+                // alert("Post: "+JSON.stringify(values.data));
+                            (<div key={key+1}>
+                                {/* <p>{JSON.stringify(values.data)}</p> */}
+                                <Post 
+                                    key={id}
+                                    name={name}
+                                    description={description}
+                                    message={message}
+                                    photoUrl={photoUrl}
+                                    />
+                                </div>)
+                        })
                     }
                 )
             }
-            {/* <Post name="Abhijit Majumder" description="This is the test" message="Wow this is work !!!"/> */}
+            <Post name={user.displayName} description={user.email} message={user.message}/>
+            <Post name={user.displayName} description={user.email} message={user.message}/>
+            <Post name={user.displayName} description={user.email} message={user.message}/>
+            <Post name={user.displayName} description={user.email} message={user.message}/>
+            </FlipMove>
         </div>
     )
 }
