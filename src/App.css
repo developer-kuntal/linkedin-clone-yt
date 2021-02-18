@@ -7,4 +7,8 @@
 
 .app_body {
     display: flex;
+    margin-top: 25px;
+    max-width: 12000px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
