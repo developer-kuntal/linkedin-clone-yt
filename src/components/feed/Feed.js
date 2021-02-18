@@ -29,6 +29,7 @@ function Feed() {
             setPosts(
 
                 snapshot.docs.map((doc) => ({
+                    id: doc.id,
                     data: doc.data(),
                 }))
             )
@@ -129,29 +130,23 @@ function Feed() {
             </div>
 
             <FlipMove>
-            {posts && [posts].map(( post , i ) =>  {
-                        post.forEach((values,key) => {
-                //     return <p>{i+1} = {JSON.stringify(values)} </p>
-                // })
-                // return <div><p key={i+1}>{JSON.stringify(post)}Index{i+1}</p></div>
-                // [{"id":"oV4jnCz3RjfVGGcKXfHz","data":{"description":"This is a test","name":"Abhijit Majumder","timestamp":
-                // {"seconds":1613560087,"nanoseconds":688000000},"message":"alibaba","id":"c5d95327-c181-44b0-9f85-6329a431ce8f","photoUrl":""}}]
-
-                const { description, name, message, id, photoUrl } = JSON.stringify(values.data);
-                // alert("Post: "+JSON.stringify(values.data));
-                            (<div key={key+1}>
-                                {/* <p>{JSON.stringify(values.data)}</p> */}
+            {posts && [posts].map(( post, i ) =>  {
+                <div key={i+1}>{
+                        post.forEach((values, key) => {
+                            const id = JSON.stringify(values.id);
+                            const { description, name, message, photoUrl } = JSON.stringify(values.data);
+                            return (
                                 <Post 
                                     key={id}
                                     name={name}
                                     description={description}
                                     message={message}
                                     photoUrl={photoUrl}
-                                    />
-                                </div>)
-                        })
-                    }
-                )
+                                 />
+                            )
+                        })}
+                </div>
+                })
             }
             <Post name={user.displayName} description={user.email} message={user.message}/>
             <Post name={user.displayName} description={user.email} message={user.message}/>
