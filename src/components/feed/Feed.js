@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import './Feed.css'
+import FlipMove from 'react-flip-move'
 import CreateIcon from '@material-ui/icons/Create'
 import ImageIcon from '@material-ui/icons/Image'
-import InputOption from '../input/InputOption'
 import CalendarViewDayIcon from '@material-ui/icons/CalendarViewDay'
 import SubscriptionsIcon from '@material-ui/icons/Subscriptions'
 import EventNoteIcon from '@material-ui/icons/EventNote'
-import Post from '../post/Post'
 import { db } from '../../auth/firebase'
 import firebase from 'firebase'
 import { v4 as uuidv4 } from 'uuid';
 import { selectUser } from '../../features/userSlice'
-import FlipMove from 'react-flip-move'
+import InputOption from '../input/InputOption'
+import Post from '../post/Post'
 
 function Feed() {
 
@@ -94,21 +94,34 @@ function Feed() {
 
     const sendPost = (e) => {
         // if(input.length !== '') {
+            // <p>{JSON.stringify(e)}</p>
+            // if(e.target.value !== '' ) {
+                db.collection("posts").add(
+                    {
+                        id: uuidv4(),
+                        name: user.displayName,
+                        description: user.email ,
+                        message: input,
+                        photoUrl: user.photoUrl || "",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        
+                    }
+                ).then( (p) => {
+                    console.log("post saved successfully...");
+                    setInput('');
+                    console.log("Vale: "+e.target.value);
+                }).catch((error) => {
+                    console.log("error to insert record in a firestore... "+error.message);
+                    setInput('');
+                    console.log("Value: "+e.target.value);
+                });
+            // }
+            setInput('');
             e.preventDefault();
-            db.collection("posts").add(
-                {
-                    id: uuidv4(),
-                    name: user.displayName,
-                    description: user.email ,
-                    message: input,
-                    photoUrl: user.photoUrl || "",
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    
-                }
-            )
+            // defaultPrevented: false;
         // }
 
-        setInput("");
+        
     }
 
     return (
@@ -130,28 +143,28 @@ function Feed() {
             </div>
 
             <FlipMove>
-            {posts && [posts].map(( post, i ) =>  {
-                <div key={i+1}>{
-                        post.forEach((values, key) => {
-                            const id = JSON.stringify(values.id);
-                            const { description, name, message, photoUrl } = JSON.stringify(values.data);
-                            return (
-                                <Post 
-                                    key={id}
-                                    name={name}
-                                    description={description}
-                                    message={message}
-                                    photoUrl={photoUrl}
-                                 />
-                            )
-                        })}
-                </div>
-                })
+            {posts && posts.map((values) => {
+
+                // eslint-disable-next-line 
+                const { id, name, description, message, photoUrl, timestamp } = values.data;
+
+                    return (
+                        <Post
+                            key={id}
+                            name={name}
+                            description={description}
+                            message={message}
+                            photoUrl={photoUrl}
+                        />
+                    )
+              })
             }
+            
+            {/* <Post name={user.displayName} description={user.email} message={user.message}/>
             <Post name={user.displayName} description={user.email} message={user.message}/>
             <Post name={user.displayName} description={user.email} message={user.message}/>
-            <Post name={user.displayName} description={user.email} message={user.message}/>
-            <Post name={user.displayName} description={user.email} message={user.message}/>
+            <Post name={user.displayName} description={user.email} message={user.message}/> */}
+
             </FlipMove>
         </div>
     )
