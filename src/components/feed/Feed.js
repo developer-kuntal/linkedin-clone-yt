@@ -9,7 +9,7 @@ import SubscriptionsIcon from '@material-ui/icons/Subscriptions'
 import EventNoteIcon from '@material-ui/icons/EventNote'
 import { db } from '../../auth/firebase'
 import firebase from 'firebase'
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { selectUser } from '../../features/userSlice'
 import InputOption from '../input/InputOption'
 import Post from '../post/Post'
@@ -27,7 +27,6 @@ function Feed() {
         postsRef.onSnapshot((snapshot) => {
             // console.log('onSnapshot Called!');
             setPosts(
-
                 snapshot.docs.map((doc) => ({
                     id: doc.id,
                     data: doc.data(),
@@ -98,7 +97,7 @@ function Feed() {
             // if(e.target.value !== '' ) {
                 db.collection("posts").add(
                     {
-                        id: uuidv4(),
+                        // id: uuidv4(),
                         name: user.displayName,
                         description: user.email ,
                         message: input,
@@ -108,15 +107,16 @@ function Feed() {
                     }
                 ).then( (p) => {
                     console.log("post saved successfully...");
-                    setInput('');
+                    // setInput(input,'');
                     console.log("Vale: "+e.target.value);
                 }).catch((error) => {
                     console.log("error to insert record in a firestore... "+error.message);
-                    setInput('');
+                    // setInput(input,'');
                     console.log("Value: "+e.target.value);
                 });
             // }
             setInput('');
+            // setInput(...input, '');
             e.preventDefault();
             // defaultPrevented: false;
         // }
@@ -144,10 +144,10 @@ function Feed() {
 
             <FlipMove>
             {posts && posts.map((values) => {
-
+                
                 // eslint-disable-next-line 
-                const { id, name, description, message, photoUrl, timestamp } = values.data;
-
+                const { name, description, message, photoUrl, timestamp } = values.data;
+                const id = values.id;
                     return (
                         <Post
                             key={id}
